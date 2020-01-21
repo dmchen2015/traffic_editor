@@ -11,6 +11,7 @@ setup(
         'building_map_server',
         'building_map_generators',
         'tripy'],
+    package_data={'building_map' : ['templates/*']},
     py_modules=[],
     data_files=[
         ('share/ament_index/resource_index/packages',

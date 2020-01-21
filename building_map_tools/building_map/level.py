@@ -79,9 +79,11 @@ class Level:
             self.doors = self.parse_edge_sequence(yaml_node['doors'])
 
         self.models = []
+        '''
         if 'models' in yaml_node:
             for model_yaml in yaml_node['models']:
                 self.models.append(Model(model_yaml, self.scale))
+        '''
 
         self.floors = []
         if 'floors' in yaml_node:
@@ -131,10 +133,15 @@ class Level:
         visual_ele = SubElement(link_ele, 'visual')
         visual_ele.set('name', f'walls_{wall_cnt}')
         self.generate_wall_box_geometry(wall, visual_ele, 'wall')
+        #TODO support materials
+        '''
         material_ele = SubElement(visual_ele, 'material')
         script_ele = SubElement(material_ele, 'script')
+        uri_ele = SubElement(script_ele, 'uri')
+        uri_ele.text = 'SossSimulation'
         name_ele = SubElement(script_ele, 'name')
-        name_ele.text = 'SossSimulation/SimpleWall'
+        name_ele.text = 'SimpleWall'
+        '''
 
         collision_ele = SubElement(link_ele, 'collision')
         collision_ele.set('name', f'walls_{wall_cnt}')
@@ -147,10 +154,13 @@ class Level:
         cap_visual_ele = SubElement(link_ele, 'visual')
         cap_visual_ele.set('name', f'cap_{wall_cnt}')
         self.generate_wall_box_geometry(wall, cap_visual_ele, 'cap')
+        #TODO support materials
+        '''
         cap_material_ele = SubElement(cap_visual_ele, 'material')
         cap_script_ele = SubElement(cap_material_ele, 'script')
         cap_script_name_ele = SubElement(cap_script_ele, 'name')
         cap_script_name_ele.text = 'Gazebo/Black'
+        '''
 
     def generate_wall_visual_mesh(self, model_name, model_path):
         print(f'generate_wall_visual_mesh({model_name}, {model_path})')
