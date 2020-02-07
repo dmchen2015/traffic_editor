@@ -127,19 +127,18 @@ class Level:
         pose_ele = SubElement(parent_ele, 'pose')
         pose_ele.text = f'{cx} {cy} {cz} 0 0 {wall_yaw}'
 
-    def generate_wall(self, wall, link_ele, wall_cnt):
+    def generate_wall(self, wall, model_name, link_ele, wall_cnt):
         visual_ele = SubElement(link_ele, 'visual')
         visual_ele.set('name', f'walls_{wall_cnt}')
         self.generate_wall_box_geometry(wall, visual_ele, 'wall')
-        #TODO support materials
-        '''
         material_ele = SubElement(visual_ele, 'material')
-        script_ele = SubElement(material_ele, 'script')
-        uri_ele = SubElement(script_ele, 'uri')
-        uri_ele.text = 'SossSimulation'
-        name_ele = SubElement(script_ele, 'name')
-        name_ele.text = 'SimpleWall'
-        '''
+        # We use the PBR pipeline to map a texture through sdf
+        diffuse_ele = SubElement(material_ele, 'diffuse')
+        diffuse_ele.text = '0.5 0.5 0.5 1.0'
+        pbr_ele = SubElement(material_ele, 'pbr')
+        metal_ele = SubElement(pbr_ele, 'metal')
+        albedo_ele = SubElement(metal_ele, 'albedo_map')
+        albedo_ele.text = f'{model_name}/meshes/wall.png'
 
         collision_ele = SubElement(link_ele, 'collision')
         collision_ele.set('name', f'walls_{wall_cnt}')
@@ -240,7 +239,7 @@ class Level:
         wall_cnt = 0
         for wall in self.walls:
             wall_cnt += 1
-            self.generate_wall(wall, link_ele, wall_cnt)
+            self.generate_wall(wall, model_name, link_ele, wall_cnt)
 
     def generate_sdf_models(self, world_ele):
         model_cnt = 0
